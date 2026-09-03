@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Task Details - TaskFlow</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container navbar-inner">
+      <a class="brand" href="dashboard.html"><span class="brand-icon">&#9989;</span> TaskFlow</a>
+      <div class="navbar-actions">
+        <span class="nav-user">Hi, <span data-user-name>there</span></span>
+        <a class="btn btn-secondary" href="#" data-logout>Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <div class="page-header">
+      <h1>Task Details</h1>
+      <a class="btn btn-secondary" href="dashboard.html">&larr; Back to Dashboard</a>
+    </div>
+
+    <div id="detail-loading" class="loading">Loading task...</div>
+
+    <div id="task-detail-container" class="detail-card" style="display: none;">
+      <h1 id="detail-title"></h1>
+
+      <div class="task-meta" style="margin-bottom: 18px;">
+        <span class="badge" id="detail-status-badge"></span>
+        <span id="detail-priority"></span>
+      </div>
+
+      <div class="detail-row">
+        <span class="label">Description</span>
+        <span id="detail-description"></span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Due Date</span>
+        <span id="detail-due-date"></span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Created</span>
+        <span id="detail-created"></span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Last Updated</span>
+        <span id="detail-updated"></span>
+      </div>
+
+      <div class="form-group" style="margin-top: 20px; max-width: 260px;">
+        <label for="status-select">Change Status</label>
+        <select class="status-select form-control" id="status-select">
+          <option value="PENDING">Pending</option>
+          <option value="IN_PROGRESS">In Progress</option>
+          <option value="COMPLETED">Completed</option>
+        </select>
+      </div>
+
+      <div class="detail-actions">
+        <a class="btn btn-secondary" id="edit-task-link" href="#">Edit Task</a>
+        <button class="btn btn-danger" id="delete-task-btn">Delete Task</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Delete confirmation modal -->
+  <div class="modal-overlay" id="delete-modal">
+    <div class="modal-box">
+      <h3>Delete this task?</h3>
+      <p>This action cannot be undone.</p>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="cancel-delete">Cancel</button>
+        <button class="btn btn-danger" id="confirm-delete">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/task.js"></script>
+</body>
+</html>

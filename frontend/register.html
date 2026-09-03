@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up - TaskFlow</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container navbar-inner">
+      <a class="brand" href="index.html"><span class="brand-icon">&#9989;</span> TaskFlow</a>
+    </div>
+  </nav>
+
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <h2>Create your account</h2>
+      <p class="auth-subtitle">Start organizing your tasks in minutes.</p>
+
+      <div id="form-alert" class="alert"></div>
+
+      <form id="register-form" novalidate>
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input class="form-control" type="text" id="name" name="name" required autocomplete="name" />
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input class="form-control" type="email" id="email" name="email" required autocomplete="email" />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input class="form-control" type="password" id="password" name="password" required autocomplete="new-password" />
+          <div style="color: var(--color-text-muted); font-size: 0.8rem; margin-top: 4px;">
+            Must be at least 8 characters, with an uppercase letter, lowercase letter, and a number.
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <input class="form-control" type="password" id="confirmPassword" name="confirmPassword" required autocomplete="new-password" />
+        </div>
+        <button class="btn btn-primary btn-block" type="submit" id="submit-btn">Create Account</button>
+      </form>
+
+      <div class="auth-footer">
+        Already have an account? <a href="login.html">Log in</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/register.js"></script>
+</body>
+</html>
