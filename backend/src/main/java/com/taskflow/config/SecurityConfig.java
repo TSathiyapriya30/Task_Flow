@@ -25,6 +25,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -37,7 +38,6 @@ public class SecurityConfig {
     @Value("${cors.allowed-origins}")
     private String allowedOrigins;
 
-    // Manual constructor - replaces Lombok @RequiredArgsConstructor
     public SecurityConfig(
             JwtAuthenticationFilter jwtAuthenticationFilter,
             UserDetailsService userDetailsService
@@ -67,7 +67,6 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration config
     ) throws Exception {
-
         return config.getAuthenticationManager();
     }
 
@@ -77,53 +76,39 @@ public class SecurityConfig {
     ) throws Exception {
 
         http
-                // Disable CSRF because this is a REST API
                 .csrf(csrf -> csrf.disable())
 
-                // Enable CORS
-                .cors(cors ->
-                        cors.configurationSource(
-                                corsConfigurationSource()
-                        )
-                )
+                // CORS
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-                // JWT authentication is stateless
+                // Stateless JWT authentication
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(
                                 SessionCreationPolicy.STATELESS
                         )
                 )
 
-                // Authorization rules
+                // Authorization
                 .authorizeHttpRequests(auth -> auth
 
-                        // Registration and login don't require JWT
+                        // IMPORTANT: allow preflight requests
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
+                        // Public authentication endpoints
                         .requestMatchers(
                                 "/api/auth/register",
                                 "/api/auth/login"
                         ).permitAll()
 
-                        // Allow CORS preflight requests
-                        .requestMatchers(
-                                HttpMethod.OPTIONS,
-                                "/**"
-                        ).permitAll()
+                        // Health check
+                        .requestMatchers("/actuator/health").permitAll()
 
-                        // Health endpoint
-                        .requestMatchers(
-                                "/actuator/health"
-                        ).permitAll()
-
-                        // Everything else requires authentication
+                        // Everything else requires JWT
                         .anyRequest().authenticated()
                 )
 
-                // Authentication provider
-                .authenticationProvider(
-                        authenticationProvider()
-                )
+                .authenticationProvider(authenticationProvider())
 
-                // JWT filter runs before Spring's username/password filter
                 .addFilterBefore(
                         jwtAuthenticationFilter,
                         UsernamePasswordAuthenticationFilter.class
@@ -135,16 +120,15 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
 
-        CorsConfiguration configuration =
-                new CorsConfiguration();
+        CorsConfiguration configuration = new CorsConfiguration();
 
-        // Read frontend URL(s) from application.properties
-        configuration.setAllowedOrigins(
-                List.of(
-                        allowedOrigins
-                                .split(",")
-                )
-        );
+        // Read allowed frontend origins from environment variable
+        List<String> origins = Arrays.stream(allowedOrigins.split(","))
+                .map(String::trim)
+                .filter(origin -> !origin.isEmpty())
+                .toList();
+
+        configuration.setAllowedOrigins(origins);
 
         configuration.setAllowedMethods(
                 List.of(
@@ -161,7 +145,8 @@ public class SecurityConfig {
                 List.of(
                         "Authorization",
                         "Content-Type",
-                        "Accept"
+                        "Accept",
+                        "Origin"
                 )
         );
 
