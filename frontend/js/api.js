@@ -9,7 +9,7 @@
  * Change this if your Spring Boot backend runs on a different host/port.
  * It is intentionally kept in one place so it's easy to configure.
  */
-const API_BASE_URL = window.TASKFLOW_API_BASE_URL || "http://localhost:8080/api";
+const API_BASE_URL = window.TASKFLOW_API_BASE_URL || "https://task-flow-iizd.onrender.com/api";
 
 /**
  * Internal helper: performs a fetch() call, attaches the JWT (if present),
